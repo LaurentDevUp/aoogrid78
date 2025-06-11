@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "node -e \"const fs = require('fs'); const path = require('path'); const settingsPath = path.join(__dirname, '.vscode', 'settings.json'); const settings = { 'editor.quickSuggestions': { strings: true }, 'tailwindCSS.includeLanguages': { plaintext: 'html' }, 'tailwindCSS.experimental.classRegex': ['class:\\s*\"([^\"]*)\"'], 'files.associations': { '*.css': 'tailwindcss' } }; fs.mkdirSync(path.dirname(settingsPath), { recursive: true }); fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2));\""
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.0.2",
