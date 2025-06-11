@@ -8,6 +8,12 @@ export default defineConfig(({ command, mode }) => {
 
   return {
     plugins: [react()],
+    css: {
+      postcss: './postcss.config.js',
+      modules: {
+        localsConvention: 'camelCase'
+      }
+    },
     // Expose les variables d'environnement au client
     define: {
       'import.meta.env.VITE_SUPABASE_URL': JSON.stringify(env.VITE_SUPABASE_URL),

@@ -1,12 +1,13 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { supabase } from '@/lib/supabase';
+
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/components/ui/toast-simple';
 import { useNavigate } from 'react-router-dom';
+import useAuthStore from '@/store/useAuthStore';
 
 // 1. Définition du schéma de validation avec Zod
 const loginSchema = z.object({
@@ -19,6 +20,7 @@ type LoginFormData = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { signIn } = useAuthStore();
   
   // 2. Initialisation de React Hook Form avec validation Zod
   const {
@@ -35,39 +37,29 @@ export function LoginForm() {
   });
 
   // 3. Gestion de la soumission du formulaire
-  const onSubmit = async (data: LoginFormData) => {
+    const onSubmit = async (data: LoginFormData) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email: data.email,
-        password: data.password,
-      });
-
-      if (error) {
-        // 4. Gestion des erreurs d'authentification
-        if (error.message.includes('Invalid login credentials')) {
-          setError('root', {
-            type: 'manual',
-            message: 'Identifiants incorrects. Veuillez réessayer.',
-          });
-        } else {
-          throw error;
-        }
-      } else {
-        // Connexion réussie
-        toast({
-          title: 'Connexion réussie',
-          description: 'Vous êtes maintenant connecté.',
-        });
-        // Redirection vers la page d'accueil ou le tableau de bord
-        navigate('/dashboard');
-      }
-    } catch (error) {
-      console.error('Erreur lors de la connexion:', error);
+      await signIn(data.email, data.password);
       toast({
-        variant: 'destructive',
-        title: 'Erreur de connexion',
-        description: 'Une erreur est survenue lors de la connexion. Veuillez réessayer.',
+        title: 'Connexion réussie',
+        description: 'Vous êtes maintenant connecté.',
       });
+      navigate('/dashboard');
+    } catch (error: any) {
+      const errorMessage = error.message || 'Une erreur est survenue.';
+      
+      if (errorMessage.includes('Invalid login credentials')) {
+        setError('root', {
+          type: 'manual',
+          message: 'Identifiants incorrects. Veuillez réessayer.',
+        });
+      } else {
+        toast({
+          variant: 'destructive',
+          title: 'Erreur de connexion',
+          description: errorMessage,
+        });
+      }
     }
   };
 

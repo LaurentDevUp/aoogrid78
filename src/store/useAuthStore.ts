@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
 import { User } from '@/types/auth';
+import { supabase } from '@/lib/supabase';
 
 // Types pour le store
 type AuthState = {
@@ -11,6 +12,7 @@ type AuthState = {
 
 type AuthActions = {
   setUser: (user: User | null) => void;
+  signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   clearError: () => void;
 };
@@ -28,36 +30,56 @@ const useAuthStore = create<AuthStore>()(
       user: null,
       isLoading: false,
       error: null,
-      
+
       // Définit l'utilisateur actuel
       setUser: (user) => set({ user, error: null }),
-      
-      // Déconnexion de l'utilisateur
-      signOut: async () => {
+
+      // Connexion de l'utilisateur
+      signIn: async (email, password) => {
+        set({ isLoading: true, error: null });
         try {
-          set({ isLoading: true, error: null });
-          
-          // Ici, vous pouvez ajouter la logique de déconnexion spécifique
-          // Par exemple, avec Supabase : await supabase.auth.signOut();
-          
-          // Réinitialisation de l'état
-          set({ user: null, error: null });
-          
-        } catch (error) {
-          console.error('Erreur lors de la déconnexion:', error);
-          
-          const errorMessage = error instanceof Error 
-            ? error.message 
-            : 'Une erreur est survenue lors de la déconnexion';
-            
+          const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+          if (error) throw error;
+
+          if (data.user) {
+            const userPayload: User = {
+              id: data.user.id,
+              email: data.user.email || '',
+              user_metadata: data.user.user_metadata,
+            };
+            set({ user: userPayload, error: null });
+          } else {
+            throw new Error('Aucun utilisateur retourné après la connexion.');
+          }
+        } catch (error: any) {
+          const errorMessage = error.message || 'Une erreur est survenue lors de la connexion';
           set({ error: errorMessage });
-          throw error; // Propage l'erreur pour une gestion dans le composant appelant
-          
+          throw error; // Propagate error
         } finally {
           set({ isLoading: false });
         }
       },
-      
+
+      // Déconnexion de l'utilisateur
+      signOut: async () => {
+        set({ isLoading: true, error: null });
+        try {
+          const { error } = await supabase.auth.signOut();
+          if (error) throw error;
+          set({ user: null, error: null });
+        } catch (error: any) {
+          const errorMessage = error.message || 'Une erreur est survenue lors de la déconnexion';
+          set({ error: errorMessage });
+          throw error; // Propage l'erreur pour une gestion dans le composant appelant
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
       // Efface les erreurs
       clearError: () => set({ error: null }),
     }),
