@@ -1,48 +1,51 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { User, AuthState } from '@/types/auth';
+import { User } from '@/types/auth';
+
+// Types pour le store
+type AuthStore = {
+  user: User | null;
+  isLoading: boolean;
+  error: string | null;
+  setUser: (user: User | null) => void;
+  signOut: () => Promise<void>;
+  clearError: () => void;
+};
 
 // Clé pour le stockage persistant
 const AUTH_STORAGE_KEY = 'auth-storage';
 
-// État initial
-const initialState = {
-  user: null,
-  isLoading: false,
-  error: null,
-} as const;
-
 // Création du store avec persistance
-const useAuthStore = create<AuthState>()(
+const useAuthStore = create<AuthStore>()(
   persist(
     (set) => ({
-      ...initialState,
+      // État initial
+      user: null,
+      isLoading: false,
+      error: null,
       
       // Définit l'utilisateur actuel
-      setUser: (user: User | null) => {
-        set({ user, error: null });
-      },
+      setUser: (user) => set({ user, error: null }),
       
       // Déconnexion de l'utilisateur
       signOut: async () => {
         try {
           set({ isLoading: true });
           
-          // Ici, vous pouvez ajouter un appel API pour déconnecter l'utilisateur
-          // Par exemple avec Supabase: await supabase.auth.signOut();
+          // Ici, vous pouvez ajouter la logique de déconnexion spécifique
+          // Par exemple, avec Supabase : await supabase.auth.signOut();
           
-          // Réinitialise l'état
-          set({
-            user: null,
-            isLoading: false,
-            error: null,
-          });
+          // Réinitialisation de l'état
+          set({ user: null, error: null });
         } catch (error) {
           console.error('Erreur lors de la déconnexion:', error);
-          set({
-            isLoading: false,
-            error: 'Une erreur est survenue lors de la déconnexion',
+          set({ 
+            error: error instanceof Error 
+              ? error.message 
+              : 'Une erreur est survenue lors de la déconnexion' 
           });
+        } finally {
+          set({ isLoading: false });
         }
       },
       
@@ -50,10 +53,10 @@ const useAuthStore = create<AuthState>()(
       clearError: () => set({ error: null }),
     }),
     {
-      name: AUTH_STORAGE_KEY, // clé pour le stockage local
-      storage: createJSONStorage(() => localStorage), // utilise localStorage par défaut
+      name: AUTH_STORAGE_KEY,
+      storage: createJSONStorage(() => localStorage),
+      // Ne persister que l'utilisateur, pas l'état de chargement ni les erreurs
       partialize: (state) => ({
-        // Ne persiste que l'utilisateur pour éviter de stocker des états temporaires
         user: state.user,
       }),
     }

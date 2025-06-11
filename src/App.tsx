@@ -1,5 +1,5 @@
 import UserProfile from './components/UserProfile';
-import { TestAuth } from './components/TestAuth';
+import { AuthTest } from './components/auth/AuthTest';
 
 function App() {
   return (
@@ -24,9 +24,16 @@ function App() {
           </div>
           
           {/* Section de test d'authentification */}
-          <div className="rounded-lg border bg-card p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-semibold">Test d'intégration</h2>
-            <TestAuth />
+          <div className="space-y-6">
+            <div className="rounded-lg border bg-card p-6 shadow-sm">
+              <h2 className="mb-4 text-xl font-semibold">Test d'authentification</h2>
+              <AuthTest />
+            </div>
+            
+            <div className="rounded-lg border bg-card p-6 shadow-sm">
+              <h2 className="mb-4 text-xl font-semibold">État de la session</h2>
+              <UserProfile />
+            </div>
           </div>
           
           {/* Section de profil utilisateur */}
