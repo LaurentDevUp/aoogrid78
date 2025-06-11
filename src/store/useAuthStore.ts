@@ -15,7 +15,7 @@ const initialState = {
 // Création du store avec persistance
 const useAuthStore = create<AuthState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       ...initialState,
       
       // Définit l'utilisateur actuel

@@ -1,4 +1,5 @@
-import { UserProfile } from './components/UserProfile'
+import UserProfile from './components/UserProfile';
+import { TestAuth } from './components/TestAuth';
 
 function App() {
   return (
@@ -11,8 +12,10 @@ function App() {
           </div>
         </div>
       </header>
+      
       <main className="container py-8">
         <div className="mx-auto max-w-3xl space-y-8">
+          {/* Section d'accueil */}
           <div className="rounded-lg border bg-card p-6 shadow-sm">
             <h2 className="mb-4 text-2xl font-semibold">Bienvenue sur mon application</h2>
             <p className="text-muted-foreground">
@@ -20,12 +23,25 @@ function App() {
             </p>
           </div>
           
+          {/* Section de test d'authentification */}
+          <div className="rounded-lg border bg-card p-6 shadow-sm">
+            <h2 className="mb-4 text-xl font-semibold">Test d'intégration</h2>
+            <TestAuth />
+          </div>
+          
           {/* Section de profil utilisateur */}
           <div className="rounded-lg border bg-card p-6 shadow-sm">
+            <h2 className="mb-4 text-xl font-semibold">Profil Utilisateur</h2>
             <UserProfile />
           </div>
         </div>
       </main>
+      
+      <footer className="border-t py-6">
+        <div className="container text-center text-sm text-muted-foreground">
+          <p>© {new Date().getFullYear()} Mon Application. Tous droits réservés.</p>
+        </div>
+      </footer>
     </div>
   )
 }
