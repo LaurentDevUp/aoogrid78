@@ -18,5 +18,23 @@ export default defineConfig(({ command, mode }) => {
         '@': path.resolve(__dirname, './src'),
       },
     },
+    // Configuration pour le build de production
+    build: {
+      outDir: 'dist',
+      assetsDir: 'assets',
+      sourcemap: true,
+      rollupOptions: {
+        input: {
+          main: path.resolve(__dirname, 'index.html'),
+        },
+      },
+    },
+    // Configuration du serveur de développement
+    server: {
+      port: 3000,
+      open: true,
+    },
+    // Configuration pour le préfixe de base si nécessaire
+    base: '/',
   }
 })
