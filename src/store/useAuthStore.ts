@@ -13,6 +13,7 @@ type AuthState = {
 type AuthActions = {
   setUser: (user: User | null) => void;
   signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   clearError: () => void;
 };
@@ -65,6 +66,36 @@ const useAuthStore = create<AuthStore>()(
       },
 
       // Déconnexion de l'utilisateur
+      // Inscription d'un nouvel utilisateur
+      signUp: async (email, password) => {
+        set({ isLoading: true, error: null });
+        try {
+          const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+          });
+
+          if (error) throw error;
+
+          if (data.user) {
+            const userPayload: User = {
+              id: data.user.id,
+              email: data.user.email || '',
+              user_metadata: data.user.user_metadata,
+            };
+            set({ user: userPayload, error: null });
+          } else {
+            throw new Error('Aucun utilisateur retourné après l\'inscription.');
+          }
+        } catch (error: any) {
+          const errorMessage = error.message || 'Une erreur est survenue lors de l\'inscription';
+          set({ error: errorMessage });
+          throw error; // Propagate error
+        } finally {
+          set({ isLoading: false });
+        }
+      },
+
       signOut: async () => {
         set({ isLoading: true, error: null });
         try {
