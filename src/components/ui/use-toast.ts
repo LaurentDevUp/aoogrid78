@@ -60,23 +60,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
   }), [toasts, toast, dismissToast]);
 
   // Toast container styles
-  const toastContainerClasses = [
-    'fixed',
-    'right-4',
-    'top-4',
-    'z-50',
-    'flex',
-    'max-h-screen',
-    'w-full',
-    'flex-col-reverse',
-    'gap-2',
-    'p-4',
-    'sm:bottom-0',
-    'sm:right-4',
-    'sm:top-auto',
-    'sm:flex-col',
-    'md:max-w-[420px]',
-  ].join(' ');
+  const toastContainerClasses = 'fixed right-4 top-4 z-50 flex max-h-screen w-full flex-col-reverse gap-2 p-4 sm:bottom-0 sm:right-4 sm:top-auto sm:flex-col md:max-w-[420px]';
 
   return (
     <ToastContext.Provider value={contextValue}>
@@ -96,9 +80,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             'zoom-in-95',
             'slide-in-from-right-1/2',
             'slide-in-from-top-2',
-            toastItem.variant === 'destructive' 
-              ? 'bg-red-500 text-white' 
-              : 'bg-white',
+            toastItem.variant === 'destructive' ? 'bg-red-500 text-white' : 'bg-white',
           ].join(' ');
 
           return (
