@@ -31,18 +31,20 @@ export default {
       },
       colors: {
         // Couleurs principales
-        'blue-sky': '#009FE3',
-        'fire-red': '#E30613',
-        'earth-brown': '#A24C1B',
-        'drone-purple': '#712C81',
-        'ocre-orange': '#D97629',
+        'blue-sky': '#009FE3',    // 🔵 Bleu ciel - Header, boutons, CTA
+        'fire-red': '#E30613',    // 🔴 Rouge pompier - Accent important, CTA
+        'white': '#FFFFFF',       // ⚪ Blanc - Fond, texte secondaire
+        'earth-brown': '#A24C1B', // 🟤 Marron terre - Fond section, footer
+        'dark': '#1D1D1B',        // ⚫ Noir/Gris foncé - Texte, icônes
+        'drone-purple': '#712C81', // 🟣 Violet (drone) - Détail technique, badges
+        'ocre-orange': '#D97629', // 🟠 Orange/ocre - Hover, micro animations
+        'light-gray': '#D9D9D9',  // 🔘 Gris clair - Fonds alternatifs, bordures
         
-        // Textes
-        'anthracite': '#1D1D1B',
+        // Textes (alias pour compatibilité)
+        'anthracite': '#1D1D1B',  // Alias pour 'dark'
         'dark-gray': '#4A4A4A',
         'medium-gray': '#6B6B6B',
-        'light-gray': '#A3A3A3',
-        'very-light-gray': '#D9D9D9',
+        'very-light-gray': '#F0F0F0',
         
         // Existant (à conserver)
         border: 'hsl(var(--border))',

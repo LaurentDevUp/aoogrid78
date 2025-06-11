@@ -4,15 +4,39 @@
 @import "tailwindcss";
 
 :root {
-  --background: 255 255 255;
-  --foreground: 29 29 27; /* anthracite */
-  --border: 217 217 217; /* gris clair */
+  /* Couleurs de base */
+  --blue-sky: 0 159 227;      /* #009FE3 - Bleu ciel */
+  --fire-red: 227 6 19;       /* #E30613 - Rouge pompier */
+  --white: 255 255 255;       /* #FFFFFF - Blanc */
+  --earth-brown: 162 76 27;   /* #A24C1B - Marron terre */
+  --dark: 29 29 27;           /* #1D1D1B - Noir/Gris foncé */
+  --drone-purple: 113 44 129; /* #712C81 - Violet (drone) */
+  --ocre-orange: 217 118 41;  /* #D97629 - Orange/ocre */
+  --light-gray: 217 217 217;  /* #D9D9D9 - Gris clair */
+  
+  /* Variables système */
+  --background: var(--white);
+  --foreground: var(--dark);
+  --border: var(--light-gray);
+  
+  /* Variables fonctionnelles */
+  --primary: var(--blue-sky);
+  --secondary: var(--earth-brown);
+  --accent: var(--drone-purple);
+  --cta: var(--fire-red);
+  --hover: var(--ocre-orange);
 }
 
 .dark {
-  --background: 29 29 27;
-  --foreground: 255 255 255;
-  --border: 74 74 74; /* gris foncé */
+  /* Variables système en mode sombre */
+  --background: var(--dark);
+  --foreground: var(--white);
+  --border: var(--drone-purple);
+  
+  /* Ajustements spécifiques au mode sombre */
+  --primary: var(--blue-sky);
+  --secondary: var(--ocre-orange);
+  --accent: var(--drone-purple);
 }
 
 /* Application des polices */
@@ -28,27 +52,100 @@ body {
 
 /* Couleurs de texte */
 h1 {
-  color: rgb(29, 29, 27); /* anthracite */
+  color: rgb(var(--dark)); /* Noir/Gris foncé */
 }
 h2 {
-  color: rgb(74, 74, 74); /* dark gray */
+  color: rgb(var(--earth-brown)); /* Marron terre */
 }
 p {
-  color: rgb(128, 128, 128); /* medium gray */
+  color: rgb(var(--dark)); /* Noir/Gris foncé */
+}
+.text-primary {
+  color: rgb(var(--blue-sky)); /* Bleu ciel */
 }
 .text-secondary {
-  color: rgb(217, 217, 217); /* light gray */
+  color: rgb(var(--light-gray)); /* Gris clair */
+}
+.text-accent {
+  color: rgb(var(--drone-purple)); /* Violet (drone) */
+}
+.text-cta {
+  color: rgb(var(--fire-red)); /* Rouge pompier */
+}
+.text-hover {
+  color: rgb(var(--ocre-orange)); /* Orange/ocre */
 }
 .text-disabled {
-  color: rgb(240, 240, 240); /* very light gray */
+  color: rgba(var(--dark), 0.4); /* Noir/Gris foncé avec opacité */
 }
 
 /* Styles globaux */
 * {
-  border-color: hsl(var(--border));
+  border-color: rgb(var(--border));
 }
+
 body {
   background-color: rgb(var(--background));
   color: rgb(var(--foreground));
   font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Classes utilitaires pour les fonds */
+.bg-primary {
+  background-color: rgb(var(--blue-sky));
+}
+
+.bg-secondary {
+  background-color: rgb(var(--earth-brown));
+}
+
+.bg-accent {
+  background-color: rgb(var(--drone-purple));
+}
+
+.bg-cta {
+  background-color: rgb(var(--fire-red));
+}
+
+.bg-light {
+  background-color: rgb(var(--light-gray));
+}
+
+/* Classes utilitaires pour les boutons */
+.btn-primary {
+  background-color: rgb(var(--blue-sky));
+  color: rgb(var(--white));
+}
+
+.btn-primary:hover {
+  background-color: rgb(var(--ocre-orange));
+}
+
+.btn-secondary {
+  background-color: rgb(var(--earth-brown));
+  color: rgb(var(--white));
+}
+
+.btn-cta {
+  background-color: rgb(var(--fire-red));
+  color: rgb(var(--white));
+}
+
+/* Classes pour les sections */
+.section-primary {
+  background-color: rgb(var(--white));
+}
+
+.section-secondary {
+  background-color: rgb(var(--light-gray));
+}
+
+.section-dark {
+  background-color: rgb(var(--earth-brown));
+  color: rgb(var(--white));
+}
+
+.footer {
+  background-color: rgb(var(--earth-brown));
+  color: rgb(var(--white));
 }
